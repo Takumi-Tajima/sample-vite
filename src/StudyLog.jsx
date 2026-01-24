@@ -27,7 +27,7 @@ export const StudyLogs = () => {
         <input id="studyTime" value={studyTime} onChange={onChangeStudyTime} />時間
       </div>
       <p>入力されている学習内容: {studyContent}</p>
-      <p>入力されている学習時間: {studyTime}時間</p>
+      <p>入力されている学習時間: {studyTime == "" ? "NaN" : studyTime}時間</p>
       <ul>
         {records.map((record, index) => (
           <li key={index}>{record.title} {record.time}時間</li>
