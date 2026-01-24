@@ -1,10 +1,10 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { StudyLogs } from './StudyLog.jsx'
+import { StudyRecords } from './StudyRecords.jsx'
 
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <StudyLogs />
+    <StudyRecords />
   </StrictMode>,
 )
