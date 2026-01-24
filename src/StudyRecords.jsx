@@ -3,12 +3,12 @@ import { useState } from "react";
 export const StudyRecords = () => {
   const [records, setRecords] = useState([]);
   const [studyContent, setStudyContent] = useState("");
-  const [studyTime, setStudyTime] = useState("");
+  const [studyTime, setStudyTime] = useState(0);
 
   const onClickAddNewRecords = () => {
     const newRecords = [...records, { title: studyContent, time: studyTime }];
     setStudyContent("");
-    setStudyTime("");
+    setStudyTime(0);
     setRecords(newRecords);
   }
   const onChangeStudyContent = (e) => {
@@ -30,7 +30,7 @@ export const StudyRecords = () => {
         <input id="studyTime" value={studyTime} onChange={onChangeStudyTime} />時間
       </div>
       <p>入力されている学習内容: {studyContent}</p>
-      <p>入力されている学習時間: {studyTime == "" ? "NaN" : studyTime}時間</p>
+      <p>入力されている学習時間: {studyTime}時間</p>
       <ul>
         {records.map((record, index) => (
           <li key={index}>{record.title} {record.time}時間</li>
