@@ -4,7 +4,12 @@ export const StudyRecords = () => {
   const [records, setRecords] = useState([]);
   const [studyContent, setStudyContent] = useState("");
   const [studyTime, setStudyTime] = useState("");
+
   const onClickAddNewRecords = () => {
+    const newRecords = [...records, { title: studyContent, time: studyTime }];
+    setStudyContent("");
+    setStudyTime("");
+    setRecords(newRecords);
   }
   const onChangeStudyContent = (e) => {
     setStudyContent(e.target.value);
@@ -31,7 +36,7 @@ export const StudyRecords = () => {
           <li key={index}>{record.title} {record.time}時間</li>
         ))}
       </ul>
-      {/* <button onClick={onClickAddNewRecords}>追加</button> */}
+      <button onClick={onClickAddNewRecords}>追加</button>
     </>
   )
 }
