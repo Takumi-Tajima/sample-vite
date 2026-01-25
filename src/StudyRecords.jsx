@@ -4,12 +4,18 @@ export const StudyRecords = () => {
   const [records, setRecords] = useState([]);
   const [studyContent, setStudyContent] = useState("");
   const [studyTime, setStudyTime] = useState(0);
+  const [error, setError] = useState("");
 
   const onClickAddNewRecords = () => {
+    if (studyContent === "" || isNaN(studyTime) || studyTime < 0) {
+      setError("入力されていない項目があります");
+      return;
+    }
     const newRecords = [...records, { title: studyContent, time: studyTime }];
     setStudyContent("");
     setStudyTime(0);
     setRecords(newRecords);
+    setError("");
   }
   const onChangeStudyContent = (e) => {
     setStudyContent(e.target.value);
@@ -37,6 +43,7 @@ export const StudyRecords = () => {
         ))}
       </ul>
       <button onClick={onClickAddNewRecords}>追加</button>
+      <p>{error}</p>
     </>
   )
 }
