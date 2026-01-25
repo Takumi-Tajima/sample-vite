@@ -21,7 +21,7 @@ export const StudyRecords = () => {
     setStudyContent(e.target.value);
   };
   const onChangeStudyTime = (e) => {
-    setStudyTime(e.target.value);
+    setStudyTime(Number(e.target.value));
   };
 
   return (
@@ -44,6 +44,7 @@ export const StudyRecords = () => {
       </ul>
       <button onClick={onClickAddNewRecords}>追加</button>
       <p>{error}</p>
+      <p>合計学習時間{records.reduce((sum, record) => sum + record.time, 0)}時間</p>
     </>
   )
 }
