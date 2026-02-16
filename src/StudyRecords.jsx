@@ -1,7 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { supabase } from "./supabaseClient";
 
 export const StudyRecords = () => {
   const [records, setRecords] = useState([]);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data, error }) => {
+      if (error) {
+        console.error("接続エラー:", error.message);
+      } else {
+        console.log("Supabase接続成功！", data);
+      }
+    });
+  }, []);
   const [studyContent, setStudyContent] = useState("");
   const [studyTime, setStudyTime] = useState(0);
   const [error, setError] = useState("");
