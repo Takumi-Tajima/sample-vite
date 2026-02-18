@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { supabase } from "./supabaseClient";
 
 export const StudyRecords = ({records}) => {
   const [studyContent, setStudyContent] = useState("");
@@ -10,9 +11,18 @@ export const StudyRecords = ({records}) => {
       setError("入力されていない項目があります");
       return;
     }
-    setStudyContent("");
-    setStudyTime(0);
-    setError("");
+    supabase
+      .from('study-record')
+      .insert({ title: studyContent, time: studyTime })
+      .then(({ error }) => {
+        if (error) {
+          setError("データの追加に失敗しました");
+        } else {
+          setStudyContent("");
+          setStudyTime(0);
+          setError("");
+        }
+      });
   }
   const onChangeStudyContent = (e) => {
     setStudyContent(e.target.value);
