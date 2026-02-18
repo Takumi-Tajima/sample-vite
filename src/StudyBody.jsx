@@ -7,9 +7,8 @@ export const StudyBody = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [records, setRecords] = useState([]);
 
-  useEffect(() => {
+  const fetchStudyRecords = () => {
     supabase.from("study-record").select("*").then(({ data, error }) => {
-      setIsLoading(true);
       if (error) {
         // エラーハンドリングのみ
       } else {
@@ -17,7 +16,12 @@ export const StudyBody = () => {
       }
       setIsLoading(false);
     });
+  };
+
+  useEffect(() => {
+    fetchStudyRecords();
   }, []);
-  return isLoading ? <Loading /> : <StudyRecords records={records} />
+
+  return isLoading ? <Loading /> : <StudyRecords records={records} fetchStudyRecords={fetchStudyRecords} />
 }
   

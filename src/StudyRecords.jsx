@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { supabase } from "./supabaseClient";
 
-export const StudyRecords = ({records}) => {
+export const StudyRecords = ({records, fetchStudyRecords}) => {
   const [studyContent, setStudyContent] = useState("");
   const [studyTime, setStudyTime] = useState(0);
   const [error, setError] = useState("");
@@ -21,6 +21,7 @@ export const StudyRecords = ({records}) => {
           setStudyContent("");
           setStudyTime(0);
           setError("");
+          fetchStudyRecords();
         }
       });
   }
