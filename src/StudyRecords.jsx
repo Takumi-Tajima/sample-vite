@@ -1,22 +1,6 @@
-import { useState, useEffect } from "react";
-import { supabase } from "./supabaseClient";
+import { useState } from "react";
 
-export const StudyRecords = () => {
-  const [records, setRecords] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    supabase.from("study-record").select("*").then(({ data, error }) => {
-      setIsLoading(true);
-      if (error) {
-        console.error("データの取得に失敗:", error.message);
-      } else {
-        setRecords(data);
-      }
-      setIsLoading(false);
-    });
-  }, []);
-
+export const StudyRecords = ({records}) => {
   const [studyContent, setStudyContent] = useState("");
   const [studyTime, setStudyTime] = useState(0);
   const [error, setError] = useState("");
@@ -26,10 +10,8 @@ export const StudyRecords = () => {
       setError("入力されていない項目があります");
       return;
     }
-    const newRecords = [...records, { title: studyContent, time: studyTime }];
     setStudyContent("");
     setStudyTime(0);
-    setRecords(newRecords);
     setError("");
   }
   const onChangeStudyContent = (e) => {
@@ -38,10 +20,6 @@ export const StudyRecords = () => {
   const onChangeStudyTime = (e) => {
     setStudyTime(Number(e.target.value));
   };
-
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
 
   return (
     <>
@@ -58,7 +36,7 @@ export const StudyRecords = () => {
       <p>入力されている学習時間: {studyTime}時間</p>
       <ul>
         {records.map((record) => (
-          <li key={record}>{record.title} {record.time}時間</li>
+          <li key={record.id}>{record.title} {record.time}時間</li>
         ))}
       </ul>
       <button onClick={onClickAddNewRecords}>追加</button>
