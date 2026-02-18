@@ -3,16 +3,20 @@ import { supabase } from "./supabaseClient";
 
 export const StudyRecords = () => {
   const [records, setRecords] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data, error }) => {
+    supabase.from("study-record").select("*").then(({ data, error }) => {
+      setIsLoading(true);
       if (error) {
-        console.error("接続エラー:", error.message);
+        console.error("データの取得に失敗:", error.message);
       } else {
-        console.log("Supabase接続成功！", data);
+        setRecords(data);
       }
+      setIsLoading(false);
     });
   }, []);
+
   const [studyContent, setStudyContent] = useState("");
   const [studyTime, setStudyTime] = useState(0);
   const [error, setError] = useState("");
@@ -35,6 +39,10 @@ export const StudyRecords = () => {
     setStudyTime(Number(e.target.value));
   };
 
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
   return (
     <>
       <h1>学習記録一覧</h1>
@@ -49,8 +57,8 @@ export const StudyRecords = () => {
       <p>入力されている学習内容: {studyContent}</p>
       <p>入力されている学習時間: {studyTime}時間</p>
       <ul>
-        {records.map((record, index) => (
-          <li key={index}>{record.title} {record.time}時間</li>
+        {records.map((record) => (
+          <li key={record}>{record.title} {record.time}時間</li>
         ))}
       </ul>
       <button onClick={onClickAddNewRecords}>追加</button>
