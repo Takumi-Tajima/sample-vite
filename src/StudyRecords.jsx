@@ -25,6 +25,22 @@ export const StudyRecords = ({records, fetchStudyRecords}) => {
         }
       });
   }
+
+  const onClickDelete = (id) => {
+    supabase
+      .from('study-record')
+      .delete()
+      .eq('id', id)
+      .then(({ error }) => {
+        if (error) {
+          setError("データの削除に失敗しました");
+        } else {
+          setError("");
+          fetchStudyRecords();
+        }
+      });
+  }
+
   const onChangeStudyContent = (e) => {
     setStudyContent(e.target.value);
   };
@@ -47,7 +63,14 @@ export const StudyRecords = ({records, fetchStudyRecords}) => {
       <p>入力されている学習時間: {studyTime}時間</p>
       <ul>
         {records.map((record) => (
-          <li key={record.id}>{record.title} {record.time}時間</li>
+          <li key={record.id} style={{ display: "flex", alignItems: "center" }}>
+            <div>
+              {record.title} {record.time}時間
+            </div>
+            <div style={{ marginLeft: "3px" }}>
+              <button onClick={() => onClickDelete(record.id)}>削除</button>
+            </div>
+          </li>
         ))}
       </ul>
       <button onClick={onClickAddNewRecords}>追加</button>
