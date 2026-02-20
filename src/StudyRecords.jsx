@@ -50,13 +50,13 @@ export const StudyRecords = ({records, fetchStudyRecords}) => {
 
   return (
     <>
-      <h1>学習記録一覧</h1>
+      <h1>学習記録</h1>
       <div>
-        <label htmlFor="studyContent">学習内容</label>
+        <label htmlFor="studyContent">内容</label>
         <input id="studyContent" value={studyContent} onChange={onChangeStudyContent} />
       </div>
       <div>
-        <label htmlFor="studyTime">学習時間</label>
+        <label htmlFor="studyTime">時間</label>
         <input id="studyTime" value={studyTime} onChange={onChangeStudyTime} />時間
       </div>
       <p>入力されている学習内容: {studyContent}</p>
