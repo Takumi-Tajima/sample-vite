@@ -50,7 +50,7 @@ export const StudyRecords = ({records, fetchStudyRecords}) => {
 
   return (
     <>
-      <h1>学習記録</h1>
+      <h1 style={{backgroundColor: 'red'}}>学習</h1>
       <div>
         <label htmlFor="studyContent">内容</label>
         <input id="studyContent" value={studyContent} onChange={onChangeStudyContent} />
