@@ -36,6 +36,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-artifacts
+      - name: This is debug steps to check the contents of the artifact
+        run : pwd && ls -la
+      - name: This is debug steps to check the contents of the artifact
+        run: ls -la /home/runner/work/sample-vite/sample-vite
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
