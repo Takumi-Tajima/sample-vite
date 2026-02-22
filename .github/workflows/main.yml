@@ -32,34 +32,18 @@ jobs:
     needs: build
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
       - name: Download build artifacts
         uses: actions/download-artifact@v4
         with:
           name: build-artifacts
-      - name: This is debug steps to check the contents of the artifact
-        run : pwd && ls -la
-      - name: This is debug steps to check the contents of the artifact
-        run: ls -la /home/runner/work/sample-vite/sample-vite
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'npm'
-      - name: Install dependencies
-        run: npm install
-
       - name: Install Firebase CLI
         run: npm install -g firebase-tools
-      
-      - name: Install dependencies
-        run: npm install
-      
       - name: Prepare Google Application Credentials
         run: echo ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }} | base64 --decode > $HOME/private-key.json
-
       - name: Deploy to Firebase
         run: export GOOGLE_APPLICATION_CREDENTIALS=$HOME/private-key.json && firebase deploy --only hosting
-
       - name: Remove private key
         if : always()
         run: rm $HOME/private-key.json
