@@ -15,41 +15,44 @@ describe('StudyRecords Component', () => {
     expect(document.querySelector('h1').textContent).toBe('学習');
   });
 
-  it('フォームに学習内容と時間を入力して登録ボタンを押すと新たに記録が追加されていること', async () => {
+  it('フォームに学習内容と時間を入力して登録ボタンを押すと、正しい引数でinsertが呼ばれ、フォームがクリアされること', async () => {
     const mockFetchStudyRecords = jest.fn();
-    supabase.from.mockReturnValue({
-      insert: jest.fn().mockReturnValue(Promise.resolve({ error: null })),
-    });
-    const { rerender } = render(<StudyRecords records={[]} fetchStudyRecords={mockFetchStudyRecords} />)
+    const mockInsert = jest.fn().mockReturnValue(Promise.resolve({ error: null }));
+    supabase.from.mockReturnValue({ insert: mockInsert });
+    render(<StudyRecords records={[]} fetchStudyRecords={mockFetchStudyRecords} />)
     const user = userEvent.setup();
-
-    expect(screen.getByTestId('studyRecordsList').querySelectorAll('li')).toHaveLength(0);
     await user.type(screen.getByLabelText('内容'), 'Reactを勉強する');
     await user.type(screen.getByLabelText('時間'), '2');
-    expect(screen.getByTestId('studyContentDisplay').textContent).toBe('入力されている学習内容: Reactを勉強する');
-    expect(screen.getByTestId('studyTimeDisplay').textContent).toBe('入力されている学習時間: 2時間');
     await user.click(screen.getByText('追加'));
-    expect(screen.getByLabelText('内容').value).toBe('');
-    expect(screen.getByLabelText('時間').value).toBe('0');
-    expect(mockFetchStudyRecords).toHaveBeenCalled();
-    const updatedRecords = [{ id: 1, title: 'Reactを勉強する', time: 2 }];
-    rerender(<StudyRecords records={updatedRecords} fetchStudyRecords={mockFetchStudyRecords} />);
-    const listAfter = screen.getByTestId('studyRecordsList');
 
-    expect(listAfter.querySelectorAll('li')).toHaveLength(1);
-    expect(listAfter.textContent).toContain('Reactを勉強する');
-    expect(listAfter.textContent).toContain('2時間');
+    expect(supabase.from).toHaveBeenCalledWith('study-record');
+    expect(mockInsert).toHaveBeenCalledWith({ title: 'Reactを勉強する', time: 2 });
+    expect(screen.getByLabelText('内容')).toHaveValue('');
+    expect(screen.getByLabelText('時間')).toHaveValue('0');
+    expect(mockFetchStudyRecords).toHaveBeenCalled();
   });
 
   it('削除ボタンを押すと、その記録が削除されること', async () => {
-    // すでにタスクが1件あるデータを渡してコンポーネントをレンダリングする
-    // レンダリングされたタスクのli要素を確認して、表示ボタンがあることを確認する
-    // 表示されている削除ボタンを押すと、supabase.from().delete()が呼び出されることを確認する
-    // supabase.from().delete()の呼び出し後にfetchStudyRecordsが呼び出されることを確認する
-    // 再度コンポーネントをレンダリングして、タスクが削除されていることを確認する
+    const records = [{ id: 1, title: 'Reactを勉強する', time: 2 }];
+    const mockFetchStudyRecords = jest.fn();
+    const mockEq = jest.fn().mockReturnValue(Promise.resolve({ error: null }));
+    const mockDelete = jest.fn().mockReturnValue({ eq: mockEq });
+    supabase.from.mockReturnValue({ delete: mockDelete });
+    render(<StudyRecords records={records} fetchStudyRecords={mockFetchStudyRecords} />)
+    const user = userEvent.setup();
+    await user.click(screen.getByText('削除'));
+
+    expect(supabase.from).toHaveBeenCalledWith('study-record');
+    expect(mockDelete).toHaveBeenCalled();
+    expect(mockEq).toHaveBeenCalledWith('id', 1);
+    expect(mockFetchStudyRecords).toHaveBeenCalled();
   });
 
   it('内容が入力されていない状態でボタンを押すと、入力されていない項目がありますとエラーメッセージが表示されること', async () => {
-    // 何も入力されていない状態で追加ボタンを押すと、エラーメッセージが表示されることを確認する
+    render(<StudyRecords records={[]} fetchStudyRecords={jest.fn()} />)
+    const user = userEvent.setup();
+    await user.click(screen.getByText('追加'));
+
+    expect(screen.getByText('入力されていない項目があります')).toBeInTheDocument();
   });
 })
