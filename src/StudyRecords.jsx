@@ -59,9 +59,9 @@ export const StudyRecords = ({records, fetchStudyRecords}) => {
         <label htmlFor="studyTime">時間</label>
         <input id="studyTime" value={studyTime} onChange={onChangeStudyTime} />時間
       </div>
-      <p>入力されている学習内容: {studyContent}</p>
-      <p>入力されている学習時間: {studyTime}時間</p>
-      <ul>
+      <p data-testid="studyContentDisplay">入力されている学習内容: {studyContent}</p>
+      <p data-testid="studyTimeDisplay">入力されている学習時間: {studyTime}時間</p>
+      <ul data-testid="studyRecordsList">
         {records.map((record) => (
           <li key={record.id} style={{ display: "flex", alignItems: "center" }}>
             <div>
